@@ -9,8 +9,8 @@ import csv
 import os
 
 print("Répertoire courant : ", os.getcwd())
-# Remplacer par le chemin de votre chromedriver
-PATH = "D:/Dev/2_Scaping_training/Scraping Maps/chromedriver.exe"
+
+PATH = ".../chromedriver.exe" # Remplacer par le chemin de votre chromedriver
 service = Service(PATH)
 
 options = Options()
@@ -18,8 +18,7 @@ options.add_experimental_option("detach", True)
 
 driver = webdriver.Chrome(service=service, options=options)
 
-            # Mettre le lien de la page Google Maps dont vous souhaitez scraper les avis
-driver.get("https://maps.app.goo.gl/zMzFSnPi3yGFYNMe6")
+driver.get("https://www.google.com/maps/place/...") # Lien boutique Google Maps dont vous souhaitez scraper les avis
 
 # Gestion des cookies
 try:
@@ -43,7 +42,7 @@ except Exception as e:
     print(f"❌ Impossible de voir tous les avis. Erreur : {str(e)}")
 
 def scroll_reviews_panel(driver, max_attempts=100):
-    print("Scrolling des avis en cours...")
+    print("Chargement des avis en cours...")
     
     try:
         # Trouver le bon conteneur de scroll
@@ -105,15 +104,15 @@ try:
            #time.sleep(0.5)
         except:
             continue
-    
     print(f"✅ {len(all_plus_buttons)} boutons 'Plus' cliqués.")
+            
 except Exception as e:
     print(f"❌ Impossible de cliquer sur les boutons 'Plus'. Erreur : {str(e)}")
 
 # Initialiser une liste vide pour stocker les avis
 avis_data = []
 
-try:                                              #//button[contains(@class, 'jftiEf fontBodyMedium')]
+try: 
     review_cards = driver.find_elements(By.XPATH, "//div[@data-review-id]")
     
     for card in review_cards:
@@ -130,7 +129,7 @@ try:                                              #//button[contains(@class, 'jf
         try:
             note = card.find_element(By.XPATH, ".//span[@aria-label]").get_attribute("aria-label")
         except:
-            note = "Note non disponible"
+            note = "[Note non disponible]"
 
         data = {
             "pseudo": pseudo,
