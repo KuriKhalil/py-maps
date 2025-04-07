@@ -9,8 +9,8 @@ import csv
 import os
 
 print("Répertoire courant : ", os.getcwd())
-
-PATH = ".../chromedriver.exe" # Remplacer par le chemin de votre chromedriver
+# Remplacer par le chemin de votre chromedriver
+PATH = "D:/Dev/2_Scaping_training/Scraping Maps/chromedriver.exe"
 service = Service(PATH)
 
 options = Options()
@@ -18,8 +18,8 @@ options.add_experimental_option("detach", True)
 
 driver = webdriver.Chrome(service=service, options=options)
 
-driver.get("https://www.google.com/maps/place/...") # Lien boutique Google Maps dont vous souhaitez scraper les avis
-
+            # Mettre le lien de la page Google Maps dont vous souhaitez scraper les avis
+driver.get("https://maps.app.goo.gl/Tzct1Lu134uSTdt17")#https://maps.app.goo.gl/f9NLWciRyk3Wsdjg8
 # Gestion des cookies
 try:
     refuse_button = WebDriverWait(driver, 5).until(
@@ -32,17 +32,33 @@ except Exception as e:
 
 # Voir tous les avis
 try:
-    more_reviews = WebDriverWait(driver, 5).until(
-       EC.element_to_be_clickable((By.XPATH, "//button[contains(@aria-label, \"Plus d'avis\")]"))
+    more_reviews = WebDriverWait(driver, 5).until(                          #\"Plus d'avis\"
+       EC.element_to_be_clickable((By.XPATH, "//button[contains(@aria-label, 'Avis')]"))
     )
     more_reviews.click()
     print("✅ Tous les avis sont affichés.")
     time.sleep(0.5)
 except Exception as e:
     print(f"❌ Impossible de voir tous les avis. Erreur : {str(e)}")
+    
+    time.sleep(1)
 
+# Trier les avis
+try:
+    recent_reviews = WebDriverWait(driver, 5).until(
+        EC.element_to_be_clickable((By.XPATH, "//div[contains(@class, ('fontBodyLarge k5lwKb') and div(@aria-label='Avis les plus pertinents')]"))
+    )
+    recent_reviews.click()
+    print("✅ 'Le menu de tri' est ouvert.")
+    time.sleep(1)
+
+except Exception as e:
+    print(f"❌ Impossible de trier les avis. Erreur : {str(e)}")
+
+
+# Scrolling dans le panneau des avis
 def scroll_reviews_panel(driver, max_attempts=100):
-    print("Chargement des avis en cours...")
+    print("Scrolling des avis en cours...")
     
     try:
         # Trouver le bon conteneur de scroll
@@ -87,8 +103,8 @@ def scroll_reviews_panel(driver, max_attempts=100):
         
     except Exception as e:
         print(f"❌ Erreur pendant le scroll: {str(e)}")
+        
 
-# Appeler la fonction de scroll
 scroll_reviews_panel(driver)
 
 # Déplier tous les textes d'avis
@@ -101,18 +117,19 @@ try:
         try:
             driver.execute_script("arguments[0].click();", btn)
             print("✅ Boutons 'Plus' cliqué")
-           #time.sleep(0.5)
+
+
         except:
             continue
+    
     print(f"✅ {len(all_plus_buttons)} boutons 'Plus' cliqués.")
-            
 except Exception as e:
     print(f"❌ Impossible de cliquer sur les boutons 'Plus'. Erreur : {str(e)}")
 
 # Initialiser une liste vide pour stocker les avis
 avis_data = []
 
-try: 
+try:
     review_cards = driver.find_elements(By.XPATH, "//div[@data-review-id]")
     
     for card in review_cards:
@@ -127,9 +144,12 @@ try:
             avis = "[Aucun avis laissé]"
 
         try:
-            note = card.find_element(By.XPATH, ".//span[@aria-label]").get_attribute("aria-label")
+            if card.find_element(By.XPATH, ".//span[@aria-label]").get_attribute("aria-label"):
+                note = card.find_element(By.XPATH, ".//span[@aria-label]").get_attribute("aria-label")
+            else:
+                note = card.find_element(By.CLASS_NAME, "fzvQIb").text
         except:
-            note = "[Note non disponible]"
+            note = "Note non disponible"
 
         data = {
             "pseudo": pseudo,
