@@ -15,10 +15,9 @@ Ce projet permet d'automatiser la récupération des avis sur une page Google Ma
 ### 📂 Fichiers
 
 - `maps.py` : Script principal de scraping
-- `avis_data.csv` : Fichier généré contenant les avis uniques, je pense que
+- `avis_data.csv` : Fichier généré contenant les avis les pseudonymes de ceux ayant laissé l'avis anisi que la note.
 
 ### 🛠️ Prérequis
 
 - Python 3.x
-- Google Chrome
 - [ChromeDriver](https://sites.google.com/chromium.org/driver/)
