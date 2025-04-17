@@ -42,7 +42,7 @@ def show_all_reviews(driver):
         print(f"❌ Unable to show all reviews. Error: {str(e)}")
         time.sleep(1)
 
-def scroll_reviews_panel(driver, max_attempts=100):
+def scroll_reviews_panel(driver, max_attempts=200):
     print("Scrolling reviews in progress...")
     try:
         reviews_panel = WebDriverWait(driver, 2).until(
