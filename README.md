@@ -19,5 +19,5 @@ Ce projet permet d'automatiser la récupération des avis sur une page Google Ma
 
 ### 🛠️ Prérequis
 
-- Python 3.x
+- Python 3.11
 - [ChromeDriver](https://sites.google.com/chromium.org/driver/)
