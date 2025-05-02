@@ -36,3 +36,7 @@ This project is a **Python** script that uses **Selenium** to automatically scra
 
 - `maps.py` : Script principal de scraping
 - `avis_data.csv` : Fichier généré contenant les avis les pseudonymes de ceux ayant laissé l'avis anisi que la note.
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.
